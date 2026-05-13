@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
  *   with a data integrity violation message.
  * All methods return a ResponseEntity object containing the custom response body and the appropriate HTTP status code.
  */
+
 @RestControllerAdvice(basePackages = "pharmacie")
 public class GlobalExceptionHandler {
 
