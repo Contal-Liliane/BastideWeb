@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 
 import pharmacie.entity.Medicament;
 
+
 // Cette interface sera auto-implémentée par Spring
 
 public interface MedicamentRepository extends JpaRepository<Medicament, Integer> {
