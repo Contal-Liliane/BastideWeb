@@ -181,3 +181,15 @@ INSERT INTO LIGNE (COMMANDE_NUMERO, MEDICAMENT_REFERENCE, QUANTITE) VALUES
 (6, 6, 110), (6, 16, 65), (6, 26, 85), (6, 36, 60), (6, 91, 70),
 (7, 7, 80), (7, 17, 50), (7, 27, 95), (7, 37, 55), (7, 100, 45),
 (8, 8, 100), (8, 18, 75), (8, 28, 80), (8, 38, 70), (8, 48, 60);
+
+INSERT INTO fournisseur (id, nom, email) VALUES
+                                             (1, 'Fournisseur A', 'pharma+a@gmail.com'),
+                                             (2, 'Fournisseur B', 'pharma+b@gmail.com'),
+                                             (3, 'Fournisseur C', 'pharma+c@gmail.com');
+
+-- liaison catégorie / fournisseur
+INSERT INTO fournisseur_categorie (fournisseur_id, categorie_id) VALUES
+                                                                     (1, 1),
+                                                                     (2, 1),
+                                                                     (2, 2),
+                                                                     (3, 2);

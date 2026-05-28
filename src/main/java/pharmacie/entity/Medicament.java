@@ -61,7 +61,7 @@ public class Medicament {
 
 	/**
 	 * Niveau de reapprovisionnement
-	 * Si le stock devient inférieur ou égal à ce niveau, 
+	 * Si le stock devient inférieur ou égal à ce niveau,
 	 * on doit approvisionner de nouvelles unités de ce médicament auprès d'un fournisseur
 	 */
 	@ToString.Exclude
@@ -87,6 +87,9 @@ public class Medicament {
 	@JsonIgnore // On n'inclut pas les lignes quand on convertit le médicament en JSON
 	@OneToMany(mappedBy = "medicament", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	private List<Ligne> lignes = new LinkedList<>();
+
+
+
 
 
 }
