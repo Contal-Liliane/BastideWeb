@@ -60,7 +60,7 @@ public class ApprovisionnementService {
         StringBuilder sb = new StringBuilder();
 
         Map<String, List<Medicament>> parCategorie =
-            meds.stream().collect(Collectors.groupingBy(m -> m.getCategorie().getNom()));
+            meds.stream().collect(Collectors.groupingBy(m -> m.getCategorie().getLibelle()));
 
         for (String cat : parCategorie.keySet()) {
             sb.append("Catégorie : ").append(cat).append("\n");
