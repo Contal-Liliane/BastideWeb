@@ -11,10 +11,9 @@ import lombok.extern.slf4j.Slf4j;
 import pharmacie.dao.MedicamentRepository;
 import pharmacie.dao.UnitesParMedicament;
 
-
 @Slf4j
 @RestController
-@RequestMapping(path = "/api/stats")
+@RequestMapping("/api/stats")
 public class StatsRestController {
 
     private final MedicamentRepository medicamentDao;
@@ -24,20 +23,20 @@ public class StatsRestController {
     }
 
     /**
-     * Statistiques d'unités commandées pour les médicaments d'une catégorie.
-     * Format JSON : [{"nom" :"...","unites" : N}, ...]
+     * Retourne une liste JSON :
+     * [{"nom": "...", "unites": N}, ...]
      */
-    @GetMapping("unitesCommandeesPourCategorie/{code}")
+    @GetMapping("/unitesCommandeesPourCategorie/{code}")
     public List<UnitesParMedicament> unitesCommandeesPourCategorie(@PathVariable Integer code) {
         log.info("Stats : unitesCommandeesPourCategorie({})", code);
         return medicamentDao.unitesCommandeesPourCategorie(code);
     }
 
     /**
-     * Même statistique en format tableau [[nom, unites], ...],
-     * directement consommable par google.visualization.arrayToDataTable.
+     * Format tableau :
+     * [[nom, unites], ...]
      */
-    @GetMapping("unitesCommandeesPourCategorieV2/{code}")
+    @GetMapping("/unitesCommandeesPourCategorieV2/{code}")
     public List<Object[]> unitesCommandeesPourCategorieV2(@PathVariable Integer code) {
         log.info("Stats : unitesCommandeesPourCategorieV2({})", code);
         return medicamentDao.unitesCommandeesPourCategorieV2(code);
