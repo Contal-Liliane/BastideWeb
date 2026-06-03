@@ -1,36 +1,32 @@
 package pharmacie.service;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pharmacie.dao.MedicamentRepository;
 import pharmacie.entity.Fournisseur;
 import pharmacie.entity.Medicament;
-import pharmacie.repository.FournisseurRepository;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ApprovisionnementService {
 
-    @Autowired
-    private MedicamentRepository medicamentRepository;
+    private final MedicamentRepository medicamentRepository;
+    private final EmailService emailService;
 
-    @Autowired
-    private FournisseurRepository fournisseurRepository;
-
-    @Autowired
-    private EmailService emailService;
+    public ApprovisionnementService(MedicamentRepository medicamentRepository,
+                                    EmailService emailService) {
+        this.medicamentRepository = medicamentRepository;
+        this.emailService = emailService;
+    }
 
     public List<String> lancerApprovisionnement() {
 
-        // 1. Médicaments à réapprovisionner
         List<Medicament> aReappro = medicamentRepository.findAll()
             .stream()
             .filter(m -> m.getUnitesEnStock() < m.getNiveauDeReappro())
             .toList();
 
-        // 2. Map fournisseur -> médicaments
         Map<Fournisseur, List<Medicament>> map = new HashMap<>();
 
         for (Medicament m : aReappro) {
@@ -39,15 +35,16 @@ public class ApprovisionnementService {
             }
         }
 
-        // 3. Envoi des mails
         List<String> fournisseursContactes = new ArrayList<>();
 
         for (Map.Entry<Fournisseur, List<Medicament>> entry : map.entrySet()) {
+
             Fournisseur f = entry.getKey();
             List<Medicament> meds = entry.getValue();
 
             String message = construireMessage(meds);
 
+            // envoi du mail
             emailService.sendEmail(f.getEmail(), "Demande de devis", message);
 
             fournisseursContactes.add(f.getNom());
@@ -57,16 +54,22 @@ public class ApprovisionnementService {
     }
 
     private String construireMessage(List<Medicament> meds) {
-        StringBuilder sb = new StringBuilder();
 
         Map<String, List<Medicament>> parCategorie =
-            meds.stream().collect(Collectors.groupingBy(m -> m.getCategorie().getLibelle()));
+            meds.stream().collect(Collectors.groupingBy(
+                m -> m.getCategorie().getLibelle()
+            ));
+
+        StringBuilder sb = new StringBuilder();
 
         for (String cat : parCategorie.keySet()) {
             sb.append("Catégorie : ").append(cat).append("\n");
+
             for (Medicament m : parCategorie.get(cat)) {
                 sb.append("- ").append(m.getNom()).append("\n");
             }
+
+            sb.append("\n");
         }
 
         return sb.toString();
