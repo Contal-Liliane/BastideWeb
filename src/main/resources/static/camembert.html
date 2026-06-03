@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camembert Médicaments</title>
+
+    <!-- Google Charts -->
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(loadData);
+
+        function loadData() {
+
+            fetch('/api/stats/unitesCommandeesPourCategorieV2/1')
+                .then(response => response.json())
+                .then(data => drawChart(data));
+        }
+
+        function drawChart(data) {
+
+            let chartData = [['Medicament', 'Unites']];
+
+            data.forEach(item => {
+                chartData.push([item[0], item[1]]);
+            });
+
+            let dataTable = google.visualization.arrayToDataTable(chartData);
+
+            let options = {
+                title: 'Commandes par medicament'
+            };
+
+            let chart = new google.visualization.PieChart(document.getElementById('chart'));
+
+            chart.draw(dataTable, options);
+        }
+    </script>
+</head>
+
+<body>
+
+<h2>Camembert des medicaments</h2>
+
+<div id="chart" style="width: 600px; height: 400px;"></div>
+
+</body>
+</html>
